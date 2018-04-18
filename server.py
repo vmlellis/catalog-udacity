@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask import session as login_session
 from auth import app as auth
 from categories import app as categories
@@ -9,15 +9,6 @@ app = Flask(__name__)
 app.register_blueprint(auth)
 app.register_blueprint(categories, url_prefix='/categories')
 
-
-# Login required decorator
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in login_session:
-            return redirect(url_for('showLogin'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 # READ - home page, show latest items and categories
@@ -32,6 +23,27 @@ def showCatalog():
     return render_template('catalog.html',
         categories=categories, items=items, logged=logged)
 
+
+# JSON - all categories with all items
+@app.route('/catalog.json')
+def showCatalogJSON():
+    """Returns JSON of all categories with items in catalog"""
+    catalog = []
+    categories = session.query(Category).all()
+    for category in categories:
+        data = category.serialize
+        data['Items'] = session.query(CategoryItem).filter_by(
+            category_id=category.id).all()
+        catalog.append(data)
+    return jsonify(Categories=catalog)
+
+
+# JSON - all categories items
+@app.route('/category_items.json')
+def showCatalogItemsJSON():
+    """Returns JSON of all items in catalog"""
+    items = session.query(CategoryItem).order_by(CategoryItem.id.desc())
+    return jsonify(CategoryItems=[i.serialize for i in items])
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'

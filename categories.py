@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for
+from flask import Blueprint, request, render_template, flash, redirect, url_for, jsonify
 from flask import session as login_session
 from decorators import login_required
 from database import session, Category, CategoryItem
@@ -93,7 +93,27 @@ def editCategoryItem(category_id, category_item_id):
 
 
 # DELETE
+@app.route(
+    '/<int:category_id>/item/<int:catalog_item_id>/delete',
+    methods=['GET', 'POST'])
+@login_required
+def deleteCatalogItem(category_id, catalog_item_id):
+    return render_template('delete_catalog_item.html')
+
+
+# --------------------------------------
+# Functions
+# --------------------------------------
 
 def not_authorized():
     return "<script>function myFunction() {alert('You are not authorized!')}</script><body onload='myFunction()'>"
 
+
+# --------------------------------------
+# JSON
+# --------------------------------------
+@app.route('.json')
+def showCategoriesJSON():
+    """Returns JSON of all categories in catalog"""
+    categories = session.query(Category).all()
+    return jsonify(Categories=[r.serialize for r in categories])
