@@ -1,4 +1,5 @@
 from functools import wraps
+from flask import session as login_session
 
 # Login required decorator
 def login_required(f):

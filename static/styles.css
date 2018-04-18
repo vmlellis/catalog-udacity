@@ -18,3 +18,16 @@ body {
   height: 38px;
   padding-bottom: 15px;
 }
+
+.panel-title {
+  font-weight: bold;
+}
+
+.add-category, .actions-category {
+  position: relative;
+  top: -6px;
+}
+
+.padding-bottom {
+  padding-bottom: 15px;
+}

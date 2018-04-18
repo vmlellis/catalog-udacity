@@ -1,0 +1,22 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span class="panel-title">Are you sure you want to delete {{category.name}}?</span>
+  </div>
+  <div class="panel-body">
+    <form action="{{url_for('categories.deleteCategory', category_id=category.id) }}" method = 'post'>
+      <button type="submit" class="btn btn-danger delete" id="submit" type="submit">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        Delete
+      </button>
+      <a class="btn btn-default delete" href="{{ url_for('showCatalog') }}">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        Cancel
+      </a>
+      </button>
+    </form>
+  </div>
+
+{% endblock %}

@@ -27,7 +27,7 @@ def showCatalog():
     """Returns catalog page with all categories and recently added items"""
     categories = session.query(Category).all()
     items = session.query(
-        CategoryItem).order_by(CategoryItem.id.desc()).limit(10)
+        CategoryItem).order_by(CategoryItem.id.desc()).limit(10).all()
     logged = 'username' in login_session
     return render_template('catalog.html',
         categories=categories, items=items, logged=logged)

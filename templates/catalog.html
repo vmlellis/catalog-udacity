@@ -1,4 +1,64 @@
 {% extends "main.html" %}
 {% block content %}
-<div>CATALOG</div>
+
+<div class="row">
+    <div class="col-md-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="panel-title">Categories</span>
+          <div class="pull-right add-category">
+            <a class="btn btn-success" href="{{ url_for('categories.newCategory') }}">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+        <div class="panel-body">
+          {% if categories |length == 0 %}
+            No Category registered
+          {% else %}
+            <ul class="list-group">
+              {% for c in categories %}
+                <li class="list-group-item">
+                  <a href="{{ url_for('categories.showCategoryItems',
+                              category_id=c.id) }}">
+                    {{ c.name }}
+                  </a>
+                  {% if c.user_id == session.user_id %}
+                    <div class="pull-right actions-category">
+                      <a class="btn btn-default"
+                        href="{{ url_for('categories.editCategory',
+                                category_id=c.id) }}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                      </a>
+                      <a class="btn btn-danger"
+                        href="{{ url_for('categories.deleteCategory',
+                                category_id=c.id) }}">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                      </a>
+                    </div>
+                </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="panel-title">Latest Items</span>
+        </div>
+        <div class="panel-body">
+          {% if items |length == 0 %}
+            No Item registered
+          {% else %}
+            {% for item in items %}
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+
 {% endblock %}
