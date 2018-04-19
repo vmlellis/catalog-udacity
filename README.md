@@ -16,7 +16,7 @@ This project is using [bootstrap](http://getbootstrap.com/docs/3.3/) framework (
 
 - Download Vagrant and Virtual Box.
 - Download or clone [fullstack-nanodegree-vm repository](https://github.com/udacity/fullstack-nanodegree-vm).
-- Clone this repo into the `catlog/` directory.
+- Clone this repo into the `catalog/` directory.
 - Runs the vm (`vagrant up`).
 - Runs the terminal (`vagrant ssh`).
 
@@ -45,7 +45,6 @@ This project is using [bootstrap](http://getbootstrap.com/docs/3.3/) framework (
 }
 
 ```
-
 
 ## Getting started
 - From the main directory run `sudo pip install -r requirements.txt`.
