@@ -1,4 +1,6 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for, jsonify
+from flask import (
+    Blueprint, request, render_template, flash, redirect, url_for, jsonify
+)
 from flask import session as login_session
 from decorators import login_required
 from database import session, Category, CategoryItem, User
@@ -18,6 +20,7 @@ def showItem(category_item_id):
     """Shows a category item"""
     item = session.query(CategoryItem).filter_by(id=category_item_id).one()
     return render_template('item.html', item=item)
+
 
 # CREATE
 @app.route('/new', methods=['GET', 'POST'])
@@ -54,8 +57,8 @@ def editItem(category_item_id):
     if request.method == 'POST':
         return updateItem(editedItem)
     categories = session.query(Category).all()
-    return render_template('edit_item.html',
-        categories=categories, item=editedItem)
+    return render_template(
+        'edit_item.html', categories=categories, item=editedItem)
 
 
 def updateItem(editedItem):

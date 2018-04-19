@@ -2,6 +2,7 @@ from functools import wraps
 from flask import session as login_session
 from flask import redirect, url_for
 
+
 # Login required decorator
 def login_required(f):
     @wraps(f)

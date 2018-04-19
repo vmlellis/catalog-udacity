@@ -1,4 +1,6 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for, jsonify
+from flask import (
+    Blueprint, request, render_template, flash, redirect, url_for, jsonify
+)
 from flask import session as login_session
 from decorators import login_required
 from database import session, Category, CategoryItem, User
@@ -44,11 +46,11 @@ def editCategory(category_id):
         return updateCategory(editedCategory)
     return render_template('edit_category.html', category=editedCategory)
 
+
 def updateCategory(editedCategory):
     if request.form['name']:
         editedCategory.name = request.form['name']
-    flash('Category Successfully Edited %s' % editedCategory.name,
-        'success')
+    flash('Category Successfully Edited %s' % editedCategory.name, 'success')
     return redirect(url_for('showCatalog'))
 
 
@@ -78,12 +80,15 @@ def showCategoryItems(category_id):
             category_id=category_id).order_by(CategoryItem.id.desc()).all()
     categories = session.query(Category).all()
     logged = 'username' in login_session
-    return render_template('catalog.html',
-        categories=categories, items=items, logged=logged, category=category)
+    return render_template(
+        'catalog.html', categories=categories, items=items, logged=logged,
+        category=category)
+
 
 # --------------------------------------
 # JSON
 # --------------------------------------
+
 @app.route('.json')
 def showCategoriesJSON():
     """Returns JSON of all categories in catalog"""
@@ -94,5 +99,6 @@ def showCategoriesJSON():
 @app.route('/<int:category_id>/items.json')
 def showCategoryItemsJSON(category_id):
     """Returns JSON of all categories in catalog"""
-    items = session.query(CategoryItem).filter_by(category_id=category_id).all()
+    items = session.query(
+        CategoryItem).filter_by(category_id=category_id).all()
     return jsonify(CategoryItems=[r.serialize for r in items])

@@ -21,8 +21,8 @@ def showCatalog():
     items = session.query(
         CategoryItem).order_by(CategoryItem.id.desc()).limit(10).all()
     logged = 'username' in login_session
-    return render_template('catalog.html',
-        categories=categories, items=items, logged=logged)
+    return render_template(
+        'catalog.html', categories=categories, items=items, logged=logged)
 
 
 # JSON - all categories with all items
@@ -46,8 +46,9 @@ def showCatalogItemsJSON():
     items = session.query(CategoryItem).order_by(CategoryItem.id.desc())
     return jsonify(CategoryItems=[i.serialize for i in items])
 
+
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
+    app.run(host='0.0.0.0', port=5000)
     # app.run(host = '0.0.0.0', port = 5000, ssl_context='adhoc') # To Facebook
-    app.run(host = '0.0.0.0', port = 5000)
