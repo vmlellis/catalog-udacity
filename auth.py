@@ -16,6 +16,8 @@ app = Blueprint('auth', __name__, template_folder='templates')
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
+APP_ID = json.loads(
+    open('fb_client_secrets.json', 'r').read())['web']['app_id']
 
 
 # Login route, create anit-forgery state token
@@ -24,7 +26,8 @@ def showLogin():
     state = ''.join(
       random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
     login_session['state'] = state
-    return render_template('login.html', STATE=state)
+    return render_template('login.html',
+      STATE=state, client_id=CLIENT_ID, app_id=APP_ID)
 
 
 # CONNECT - FB login
@@ -38,8 +41,7 @@ def fbconnect():
     print "access token received %s " % access_token
 
 
-    app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
-        'web']['app_id']
+    app_id = APP_ID
     app_secret = json.loads(
         open('fb_client_secrets.json', 'r').read())['web']['app_secret']
     url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (

@@ -9,7 +9,7 @@
   <div id="signinButton">
     <span class="g-signin"
       data-scope="openid email"
-      data-clientid="743482168598-fknafqkmmi88har6vsn95toq675drn7f.apps.googleusercontent.com"
+      data-clientid="{{client_id}}"
       data-redirecturi="postmessage"
       data-accesstype="offline"
       data-cookiepolicy="single_host_origin"
@@ -18,7 +18,7 @@
     </span>
   </div>
 
-  <div>
+  <div id="fbButton" data-app-id="{{app_id}}">
     <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
       <a href='javascript:sendTokenToServer()'>Login with Facebook</a>
     </fb:login-button>

@@ -1,5 +1,6 @@
 
 function signInCallback(authResult) {
+  console.log(authResult);
   if (authResult['code']) {
     // Hide the sign-in button now that the user is authorized
     $('#signinButton').attr('style', 'display: none');
@@ -30,7 +31,7 @@ function signInCallback(authResult) {
 
 window.fbAsyncInit = function() {
   FB.init({
-    appId      : '162188974464430',
+    appId      : $('#fbButton').data('app-id'),
     cookie     : true,  // enable cookies to allow the server to access
                         // the session
     xfbml      : true,  // parse social plugins on this page
