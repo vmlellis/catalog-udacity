@@ -2,13 +2,14 @@ from flask import Flask, render_template, jsonify
 from flask import session as login_session
 from auth import app as auth
 from categories import app as categories
+from items import app as items
 from database import session, Category, CategoryItem
 
 
 app = Flask(__name__)
 app.register_blueprint(auth)
 app.register_blueprint(categories, url_prefix='/categories')
-
+app.register_blueprint(items, url_prefix='/items')
 
 
 # READ - home page, show latest items and categories

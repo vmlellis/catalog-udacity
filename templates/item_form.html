@@ -1,0 +1,39 @@
+<form method = "post">
+  <div class="form-group">
+
+    <label for="title">Title:</label>
+    <input type ="text" class="form-control" maxlength="100" name="title"
+      value="{{ item.title if item and item.title }}">
+
+    <div class="padding-bottom"></div>
+
+    <label for="description">Description:</label>
+    <textarea type ="text" class="form-control" rows="8" name="description">{{
+      item.description if item and item.description
+    }}</textarea>
+
+    <div class="padding-bottom"></div>
+
+    <label for="Category">Category:</label>
+    <select class="form-control" name="category">
+      {% for c in categories %}
+        {% if item and item.category_id == c.id %}
+          <option id="{{c.id}}" value="{{c.id}}" selected>{{c.name}}</option>
+        {% else %}
+          <option id="{{c.id}}" value="{{c.id}}">{{c.name}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+
+    <div class="padding-bottom"></div>
+
+    <button type="submit" class="btn btn-success pull-right" id="submit" type="submit">
+      <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+      Save
+    </button>
+    <a class="btn btn-default" href="#" onclick="window.history.back()">
+      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      Cancel
+    </a>
+  </div>
+</form>

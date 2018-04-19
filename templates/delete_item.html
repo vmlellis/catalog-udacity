@@ -3,10 +3,11 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    <span class="panel-title">Are you sure you want to delete {{category.name}}?</span>
+    <span class="panel-title">Are you sure you want to delete {{item.title}}?</span>
   </div>
   <div class="panel-body">
-    <form action="{{url_for('categories.deleteCategory', category_id=category.id) }}" method = 'post'>
+    <form method = 'post'
+      action="{{url_for('items.deleteItem', category_item_id=item.id) }}">
       <button type="submit" class="btn btn-danger delete pull-right" id="submit" type="submit">
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
         Delete

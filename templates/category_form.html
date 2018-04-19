@@ -1,0 +1,17 @@
+<form method = "post"
+  action="{{ url_for('categories.editCategory', category_id=category.id) if category}}">
+  <div class="form-group">
+  <label for="name">Name:</label>
+  <input type ="text" class="form-control" maxlength="100" name="name"
+    value="{{category.name if category and category.name != None}}">
+  <div class="padding-bottom"></div>
+  <button type="submit" class="btn btn-success pull-right" id="submit" type="submit">
+    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+    Save
+  </button>
+  <a class="btn btn-default delete" href="#" onclick="window.history.back()">
+    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+    Cancel
+  </a>
+  </div>
+</form>

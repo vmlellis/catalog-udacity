@@ -6,11 +6,13 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <span class="panel-title">Categories</span>
-          <div class="pull-right add-category">
-            <a class="btn btn-success" href="{{ url_for('categories.newCategory') }}">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </a>
-          </div>
+          {% if session.user_id %}
+            <div class="pull-right add-category">
+              <a class="btn btn-success" href="{{ url_for('categories.newCategory') }}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              </a>
+            </div>
+          {% endif %}
         </div>
         <div class="panel-body">
           {% if categories |length == 0 %}
@@ -19,10 +21,14 @@
             <ul class="list-group">
               {% for c in categories %}
                 <li class="list-group-item">
-                  <a href="{{ url_for('categories.showCategoryItems',
-                              category_id=c.id) }}">
+                  {% if category and category.id == c.id %}
                     {{ c.name }}
-                  </a>
+                  {% else %}
+                    <a href="{{ url_for('categories.showCategoryItems',
+                                category_id=c.id) }}">
+                      {{ c.name }}
+                    </a>
+                  {% endif %}
                   {% if c.user_id == session.user_id %}
                     <div class="pull-right actions-category">
                       <a class="btn btn-default"
@@ -47,13 +53,34 @@
     <div class="col-md-9">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <span class="panel-title">Latest Items</span>
+          <span class="panel-title">
+            {% if category %}
+                {{ category.name }} Items ({{ items |length }} items)
+            {% else %}
+              Latest Items
+            {% endif %}
+          </span>
+          {% if session.user_id %}
+            <a class="btn btn-success pull-right"
+                href="{{ url_for('items.newItem') }}">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              Add Item
+            </a>
+          {% endif %}
         </div>
         <div class="panel-body">
           {% if items |length == 0 %}
             No Item registered
           {% else %}
             {% for item in items %}
+              <div class="category-item">
+                <a href="{{ url_for('items.showItem',
+                    category_item_id=item.id) }}">
+                  {{ item.title }}</a>
+                {% if not category %}
+                  <em>({{ item.category.name }})</em>
+                {% endif %}
+              </div>
             {% endfor %}
           {% endif %}
         </div>

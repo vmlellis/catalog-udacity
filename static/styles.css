@@ -23,11 +23,15 @@ body {
   font-weight: bold;
 }
 
-.add-category, .actions-category {
+.list-group-item .btn, .panel-heading .btn {
   position: relative;
   top: -6px;
 }
 
 .padding-bottom {
   padding-bottom: 15px;
+}
+
+.category-item {
+  margin-bottom: 10px;
 }
