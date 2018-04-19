@@ -10,6 +10,8 @@ A simple web application that provides:
   - Only allowed to update or delete items and categories users who created them;
   - Users only can create category and item if logged.
 
+This project is using [bootstrap](http://getbootstrap.com/docs/3.3/) framework (v3.3.7).
+
 ## Pre-Requisites
 
 - Download Vagrant and Virtual Box.
