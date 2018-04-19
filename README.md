@@ -25,7 +25,6 @@ A simple web application that provides:
 - Then select "Add Credentials" -> "OAuth (v2) token". Choose `Web` as the type.
 - In the next page, make sure you have `http://localhost:5000` in authorized JavaScript origins and `http://localhost:5000` in Redirect URIs.
 - Get your json client secret and save as `client_secrets.json`;
--
 
 ### Generating Facebook OAuth credentials
 
