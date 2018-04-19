@@ -1,12 +1,13 @@
-from flask import Blueprint, render_template, request, flash, make_response, redirect, url_for
+from flask import (
+  Blueprint, render_template, request, flash, make_response, redirect, url_for
+)
 from flask import session as login_session
 from database import session, User
-
-import random, string
-import json
-
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+import random
+import string
+import json
 import httplib2
 import requests
 
@@ -24,10 +25,11 @@ APP_ID = json.loads(
 @app.route('/login')
 def showLogin():
     state = ''.join(
-      random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+        random.choice(
+            string.ascii_uppercase + string.digits) for x in xrange(32))
     login_session['state'] = state
-    return render_template('login.html',
-      STATE=state, client_id=CLIENT_ID, app_id=APP_ID)
+    return render_template(
+        'login.html', STATE=state, client_id=CLIENT_ID, app_id=APP_ID)
 
 
 # CONNECT - FB login
@@ -40,12 +42,13 @@ def fbconnect():
     access_token = request.data
     print "access token received %s " % access_token
 
-
-    app_id = APP_ID
     app_secret = json.loads(
         open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
-        app_id, app_secret, access_token)
+    url = (
+        'https://graph.facebook.com/oauth/access_token?'
+        'grant_type=fb_exchange_token&'
+        'client_id=%s&client_secret=%s&fb_exchange_token=%s'
+    ) % (APP_ID, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
 
@@ -53,7 +56,10 @@ def fbconnect():
     userinfo_url = "https://graph.facebook.com/v2.8/me"
     token = result.split(',')[0].split(':')[1].replace('"', '')
 
-    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token
+    url = (
+        'https://graph.facebook.com/v2.8/me?'
+        'access_token=%s&fields=name,id,email'
+    ) % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     # print "url sent for API access:%s"% url
@@ -68,7 +74,10 @@ def fbconnect():
     login_session['access_token'] = token
 
     # Get user picture
-    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
+    url = (
+        'https://graph.facebook.com/v2.8/me/picture?'
+        'access_token=%s&redirect=0&height=200&width=200'
+    ) % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
@@ -147,8 +156,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -243,23 +252,30 @@ def fbdisconnect():
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
+    url = (
+        'https://graph.facebook.com/%s/permissions?'
+        'access_token=%s'
+    ) % (facebook_id, access_token)
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
     return "you have been logged out"
+
 
 # DISCONNECT Google
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
         print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
     print 'In gdisconnect access token is %s', access_token
     print 'User name is: '
     print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = (
+        'https://accounts.google.com/o/oauth2/revoke?token=%s'
+    ) % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -274,8 +290,7 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
-
-
