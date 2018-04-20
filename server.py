@@ -3,7 +3,7 @@ from flask import session as login_session
 from auth import app as auth
 from categories import app as categories
 from items import app as items
-from database import session, Category, CategoryItem
+import database as db
 
 
 app = Flask(__name__)
@@ -17,12 +17,11 @@ app.register_blueprint(items, url_prefix='/items')
 @app.route('/catalog/')
 def showCatalog():
     """Returns catalog page with all categories and recently added items"""
-    categories = session.query(Category).all()
-    items = session.query(
-        CategoryItem).order_by(CategoryItem.id.desc()).limit(10).all()
     logged = 'username' in login_session
     return render_template(
-        'catalog.html', categories=categories, items=items, logged=logged)
+        'catalog.html', categories=db.getAllCategories(),
+        items=db.getAllItems(limit=10),
+        logged=logged)
 
 
 # JSON - all categories with all items
@@ -30,11 +29,10 @@ def showCatalog():
 def showCatalogJSON():
     """Returns JSON of all categories with items in catalog"""
     catalog = []
-    categories = session.query(Category).all()
-    for category in categories:
+    for category in db.getAllCategories():
         data = category.serialize
-        data['Items'] = session.query(CategoryItem).filter_by(
-            category_id=category.id).all()
+        items = db.getAllItems(category_id=category.id)
+        data['Items'] = [i.serialize for i in items]
         catalog.append(data)
     return jsonify(Categories=catalog)
 
@@ -43,8 +41,7 @@ def showCatalogJSON():
 @app.route('/category_items.json')
 def showCatalogItemsJSON():
     """Returns JSON of all items in catalog"""
-    items = session.query(CategoryItem).order_by(CategoryItem.id.desc())
-    return jsonify(CategoryItems=[i.serialize for i in items])
+    return jsonify(CategoryItems=[i.serialize for i in db.getAllItems()])
 
 
 if __name__ == '__main__':

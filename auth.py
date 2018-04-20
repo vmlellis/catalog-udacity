@@ -2,9 +2,9 @@ from flask import (
   Blueprint, render_template, request, flash, make_response, redirect, url_for
 )
 from flask import session as login_session
-from database import session, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+import database as db
 import random
 import string
 import json
@@ -85,9 +85,9 @@ def fbconnect():
     login_session['picture'] = data["data"]["url"]
 
     # see if user exists
-    user_id = getUserID(login_session['email'])
+    user_id = db.getUserID(login_session['email'])
     if not user_id:
-        user_id = createUser(login_session)
+        user_id = db.createUser(login_session)
     login_session['user_id'] = user_id
 
     output = ''
@@ -179,9 +179,9 @@ def gconnect():
     login_session['provider'] = 'google'
 
     # see if user exists, if it doesn't make a new one
-    user_id = getUserID(login_session['email'])
+    user_id = db.getUserID(login_session['email'])
     if not user_id:
-        user_id = createUser(login_session)
+        user_id = db.createUser(login_session)
     login_session['user_id'] = user_id
 
     output = ''
@@ -222,29 +222,6 @@ def disconnect():
     else:
         flash("You were not logged in")
     return redirect(url_for('showCatalog'))
-
-
-# --------------------------------------
-# Helper functions
-# --------------------------------------
-
-def getUserID(email):
-    try:
-        user = session.query(User).filter_by(email=email).one()
-        return user.id
-    except:
-        return None
-
-
-def createUser(login_session):
-    newUser = User(
-        name=login_session['username'],
-        email=login_session['email'],
-        picture=login_session['picture'])
-    session.add(newUser)
-    session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
-    return user.id
 
 
 # DISCONNECT FB
